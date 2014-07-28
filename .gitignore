@@ -8,6 +8,9 @@ output/
 __pycache__/
 *.py[cod]
 
+# Locally stashed data
+static/js/data.js
+
 # C extensions
 *.so
 
