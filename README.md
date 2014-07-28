@@ -20,4 +20,4 @@ You can use the route simulator to generate geospatial data and run it through t
 
 ### Loading your own data
 
-Use `tools/run_complete.sh` to run your own data through the system.
+Use `./tools/run_complete.sh <path/to/input>` to run your own data through the system.
