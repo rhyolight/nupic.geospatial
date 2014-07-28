@@ -60,6 +60,7 @@
    * Download data as a CSV file
    */
   function download() {
+    updateRoute();
     // Build CSV data
     var csvdata = "";
     $.each(_route, function(index, val) {
