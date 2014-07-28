@@ -21,3 +21,17 @@ You can use the route simulator to generate geospatial data and run it through t
 ### Loading your own data
 
 Use `./tools/run_complete.sh <path/to/input>` to run your own data through the system.
+
+### NuPIC Input File Format
+
+#### Fields
+
+1. name
+2. timestamp
+3. lon
+4. lat
+5. ?
+6. speed
+7. ?
+8. accuracy
+
