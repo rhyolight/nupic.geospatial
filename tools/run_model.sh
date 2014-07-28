@@ -5,12 +5,14 @@ if [ "$#" -ne 1 ]; then
     exit
 fi
 
-HOUND=..
-OUTPUT=output
-ANOMALY_SCORES=$OUTPUT/anomaly_scores.csv
-VISUALIZATION_DATA=$HOUND/static/js/data.js
+SCRIPT_DIR=$(dirname "${0}")
 
-mkdir -p $OUTPUT
-$HOUND/model/geospatial_anomaly.py $1 $ANOMALY_SCORES
+HOUND=..
+OUTPUT="output"
+ANOMALY_SCORES=${OUTPUT}/anomaly_scores.csv
+VISUALIZATION_DATA=${SCRIPT_DIR}/../static/js/data.js
+
+mkdir -p ${OUTPUT}
+${SCRIPT_DIR}/../model/geospatial_anomaly.py ${1} ${ANOMALY_SCORES}
 rm $VISUALIZATION_DATA
-$HOUND/tools/anomaly_to_js_data.py $ANOMALY_SCORES $VISUALIZATION_DATA
+${SCRIPT_DIR}/../tools/anomaly_to_js_data.py ${ANOMALY_SCORES} ${VISUALIZATION_DATA}

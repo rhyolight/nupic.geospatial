@@ -5,10 +5,12 @@ if [ "$#" -ne 1 ]; then
     exit
 fi
 
-HOUND=..
-OUTPUT=output
-PROCESSED_DATA=$OUTPUT/processed_data.csv
+SCRIPT_DIR=$(dirname "${0}")
 
-mkdir -p $OUTPUT
-$HOUND/tools/preprocess_data.py $1 $PROCESSED_DATA
-./run_model.sh $PROCESSED_DATA
+OUTPUT="output"
+PROCESSED_DATA=${OUTPUT}/processed_data.csv
+
+mkdir -p ${OUTPUT}
+
+${SCRIPT_DIR}/preprocess_data.py ${1} ${PROCESSED_DATA}
+${SCRIPT_DIR}/run_model.sh ${PROCESSED_DATA}
