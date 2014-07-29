@@ -47,7 +47,7 @@ def createModel():
   return ModelFactory.create(model_params.MODEL_PARAMS)
 
 
-def runGeospatialAnomaly(dataPath, outputPath):
+def runGeospatialAnomaly(dataPath, outputPath, autoSequence=True):
   model = createModel()
 
   with open (findDataset(dataPath)) as fin:
@@ -77,7 +77,7 @@ def runGeospatialAnomaly(dataPath, outputPath):
         continue
 
       newSequence = False
-      if lastTimestamp and (
+      if autoSequence and lastTimestamp and (
         (timestamp - lastTimestamp).total_seconds() > INTERVAL_THRESHOLD):
         newSequence = True
       lastTimestamp = timestamp
