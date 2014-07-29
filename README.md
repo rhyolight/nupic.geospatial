@@ -20,22 +20,4 @@ You can use the route simulator to generate geospatial data and run it through t
 
 ### Loading your own data
 
-<<<<<<< HEAD
-Use `./tools/run_complete.sh <path/to/input>` to run your own data through the system.
-
-### NuPIC Input File Format
-
-#### Fields
-
-1. name
-2. timestamp
-3. lon
-4. lat
-5. ?
-6. speed
-7. ?
-8. accuracy
-
-=======
 Use `./run.py <path/to/input>` to run data you've downloaded from the simulator (described above) through the system. This script will automatically create sequences base on the timing of the input rows. If you don't want this behavior, you can negate it with the `--manual-sequence` option.
->>>>>>> 4be1c72e7c6182c620b763750e4dbfd6e27b42ae
