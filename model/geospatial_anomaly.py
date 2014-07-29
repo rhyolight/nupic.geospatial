@@ -43,12 +43,27 @@ INTERVAL_THRESHOLD = 30  # seconds
 
 
 
-def createModel():
-  return ModelFactory.create(model_params.MODEL_PARAMS)
+def addTimeEncoders(params):
+  params["modelParams"]["sensorParams"]["encoders"]["timestamp_timeOfDay"] = {
+    "fieldname": u"timestamp",
+    "name": u"timestamp_timeOfDay",
+    "timeOfDay": (21, 9.5),
+    "type": "DateEncoder"
+  }
+  return params
 
 
-def runGeospatialAnomaly(dataPath, outputPath, autoSequence=True):
-  model = createModel()
+def createModel(useTimeEncoders):
+  params = model_params.MODEL_PARAMS
+  if useTimeEncoders:
+    params = addTimeEncoders(params)
+  return ModelFactory.create(params)
+
+
+def runGeospatialAnomaly(dataPath, outputPath,
+                         autoSequence=True,
+                         useTimeEncoders=False):
+  model = createModel(useTimeEncoders)
 
   with open (findDataset(dataPath)) as fin:
     reader = csv.reader(fin)
@@ -99,6 +114,10 @@ def runGeospatialAnomaly(dataPath, outputPath, autoSequence=True):
       modelInput = {
         "vector": (longitude, latitude, speed)
       }
+
+      if useTimeEncoders:
+        modelInput["timestamp"] = timestamp
+
       result = model.run(modelInput)
       anomalyScore = result.inferences['anomalyScore']
 
