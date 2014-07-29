@@ -65,8 +65,10 @@ def runGeospatialAnomaly(dataPath, outputPath, autoSequence=True):
     reader.next()
 
     lastTimestamp = None
+    lastTrackName = None
 
     for _, record in enumerate(reader, start=1):
+      trackName = record[0]
       timestamp = datetime.datetime.fromtimestamp(int(record[1]) / 1e3)
       longitude = float(record[2])
       latitude = float(record[3])
@@ -77,10 +79,18 @@ def runGeospatialAnomaly(dataPath, outputPath, autoSequence=True):
         continue
 
       newSequence = False
-      if autoSequence and lastTimestamp and (
-        (timestamp - lastTimestamp).total_seconds() > INTERVAL_THRESHOLD):
-        newSequence = True
+      # Handle the automatic sequence creation
+      if autoSequence:
+        if lastTimestamp and (
+          (timestamp - lastTimestamp).total_seconds() > INTERVAL_THRESHOLD):
+          newSequence = True
+      # Manual sequence resets depend on the track name
+      else:
+        if trackName != lastTrackName:
+          newSequence = True
+
       lastTimestamp = timestamp
+      lastTrackName = trackName
 
       if newSequence:
         print "Starting new sequence..."
