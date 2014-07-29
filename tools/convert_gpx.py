@@ -87,6 +87,7 @@ def run(input_path, output_dir):
             print "{0}: ({1},{2})".format(point.time.__str__(), point.latitude, point.longitude)
           writer.writerow([track.name, ts, point.longitude, point.latitude, None, meters_per_second, None, 1])
           last_point = point
+  print "Wrote output file %s." % output_file
 
 
 if __name__ == "__main__":
