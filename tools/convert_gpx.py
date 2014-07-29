@@ -34,7 +34,7 @@ parser.add_option(
 )
 
 
-def distance_on_unit_sphere_in_meters(point1, point2):
+def distanceOnUnitSphereInMeters(point1, point2):
   lat1 = point1.latitude
   long1 = point1.longitude
   lat2 = point2.latitude
@@ -42,52 +42,52 @@ def distance_on_unit_sphere_in_meters(point1, point2):
 
   # Convert latitude and longitude to
   # spherical coordinates in radians.
-  degrees_to_radians = math.pi/180.0
+  degreesToRadians = math.pi/180.0
 
   # phi = 90 - latitude
-  phi1 = (90.0 - lat1)*degrees_to_radians
-  phi2 = (90.0 - lat2)*degrees_to_radians
+  phi1 = (90.0 - lat1) * degreesToRadians
+  phi2 = (90.0 - lat2) * degreesToRadians
 
   # theta = longitude
-  theta1 = long1*degrees_to_radians
-  theta2 = long2*degrees_to_radians
+  theta1 = long1 * degreesToRadians
+  theta2 = long2 * degreesToRadians
 
-  cos = (math.sin(phi1)*math.sin(phi2)*math.cos(theta1 - theta2) +
-         math.cos(phi1)*math.cos(phi2))
+  cos = (math.sin(phi1) * math.sin(phi2) * math.cos(theta1 - theta2) +
+         math.cos(phi1) * math.cos(phi2))
   arc = math.acos( cos )
 
   # Multiplied to get M
   return arc * 6373000
 
 
-def run(input_path, output_dir):
+def run(inputPath, outputDir):
 
-  gpx_file = open(input_path, 'r')
-  gpx = gpxpy.parse(gpx_file)
+  gpxFile = open(inputPath, 'r')
+  gpx = gpxpy.parse(gpxFile)
 
-  output_file = os.path.join(output_dir, "converted_gpx_output.csv")
-  last_point = None
+  outputFile = os.path.join(outputDir, "converted_gpx_output.csv")
+  lastPoint = None
 
-  with open(output_file, 'w') as file_out:
-    writer = csv.writer(file_out)
+  with open(outputFile, 'w') as fileOut:
+    writer = csv.writer(fileOut)
     for track in gpx.tracks:
       if verbose:
         print track.name
       for segment in track.segments:
         for point in segment.points:
           ts = int(time.mktime(point.time.timetuple()) * 1000)
-          meters_per_second = 0
-          if last_point:
-            distance_travelled = distance_on_unit_sphere_in_meters(last_point, point)
-            ms_since_last_point = ts - int(time.mktime(last_point.time.timetuple()) * 1000)
-            if ms_since_last_point > 0:
-              meters_per_second = distance_travelled / (ms_since_last_point / 1000)
+          metersPerSecond = 0
+          if lastPoint:
+            distanceTravelled = distanceOnUnitSphereInMeters(lastPoint, point)
+            msSinceLastPoint = ts - int(time.mktime(lastPoint.time.timetuple()) * 1000)
+            if msSinceLastPoint > 0:
+              metersPerSecond = distanceTravelled / (msSinceLastPoint / 1000)
 
           if verbose:
             print "{0}: ({1},{2})".format(point.time.__str__(), point.latitude, point.longitude)
-          writer.writerow([track.name, ts, point.longitude, point.latitude, None, meters_per_second, None, 1])
-          last_point = point
-  print "Wrote output file %s." % output_file
+          writer.writerow([track.name, ts, point.longitude, point.latitude, None, metersPerSecond, None, 1])
+          lastPoint = point
+  print "Wrote output file %s." % outputFile
 
 
 if __name__ == "__main__":
