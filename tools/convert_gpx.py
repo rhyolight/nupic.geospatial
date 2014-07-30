@@ -33,8 +33,11 @@ DEFAULT_OUTPUT_DIR = "output"
 verbose = False
 
 parser = OptionParser(
-  usage="%prog <path/to/gpx/file> [options]\n\nConvert GPX data file into "
-        "NuPIC input file for the Geospatial Tracking Application."
+  usage="%prog <path/to/gpx/data> [options]\n\nConvert GPX data file(s) into "
+        "NuPIC input file for the Geospatial Tracking Application. You may "
+        "specify a path to one GPX data file, or a directory containing many "
+        "GPX data files, which will be processed and sorted by track start "
+        "time."
 )
 
 parser.add_option(
@@ -54,11 +57,16 @@ parser.add_option(
 )
 
 
+
 def distanceOnUnitSphereInMeters(point1, point2):
   lat1 = point1.latitude
   long1 = point1.longitude
   lat2 = point2.latitude
   long2 = point2.longitude
+
+  # Return fast if points are in the same place
+  if lat1 == lat2 and long1 == long2:
+    return 0
 
   # Convert latitude and longitude to
   # spherical coordinates in radians.
@@ -74,46 +82,78 @@ def distanceOnUnitSphereInMeters(point1, point2):
 
   cos = (math.sin(phi1) * math.sin(phi2) * math.cos(theta1 - theta2) +
          math.cos(phi1) * math.cos(phi2))
-  arc = math.acos( cos )
+  arc = math.acos(cos)
 
   # Multiplied to get M
   return arc * 6373000
 
 
-def run(inputPath, outputDir):
 
+def readGpxTracksFromFile(inputPath):
+  if verbose: print "Reading GPX file %s" % inputPath
+  inputFileName = os.path.splitext(os.path.basename(inputPath))[0]
   gpxFile = open(inputPath, 'r')
   gpx = gpxpy.parse(gpxFile)
+  return inputFileName, gpx.tracks
 
-  outputFile = os.path.join(outputDir, "converted_gpx_output.csv")
+
+
+def readTracksFromGpxFilesInDirectory(inputDir):
+  if verbose: print "Reading GPX files in directory %s" % inputPath
+  tracks = []
+  for gpxFileName in os.listdir(inputDir):
+    _, fileTracks = readGpxTracksFromFile(os.path.join(inputDir, gpxFileName))
+    tracks = tracks + fileTracks
+  return tracks
+
+
+
+def sortTracksByDateAscending(tracks):
+  return sorted(tracks, key=lambda track: track.segments[0].points[0].time)
+
+
+
+def run(inputPath, outputDir):
+
+  if os.path.isdir(inputPath):
+    inputFileName = os.path.dirname(inputPath).split('/').pop()
+    tracks = readTracksFromGpxFilesInDirectory(inputPath)
+  else:
+    inputFileName, tracks = readGpxTracksFromFile(inputPath)
+
+  tracks = sortTracksByDateAscending(tracks)
   lastPoint = None
+  outputRows = []
 
+  for track in tracks:
+    if verbose:
+      print "Processing track %s..." % track.name
+    for segment in track.segments:
+      for point in segment.points:
+        ts = int(time.mktime(point.time.timetuple()) * 1000)
+        metersPerSecond = 0
+        if lastPoint:
+          distanceTravelled = distanceOnUnitSphereInMeters(lastPoint, point)
+          msSinceLastPoint = ts - int(time.mktime(lastPoint.time.timetuple()) * 1000)
+          if msSinceLastPoint > 0:
+            metersPerSecond = distanceTravelled / (msSinceLastPoint / 1000)
+
+        outputRows.append([track.name, ts, point.longitude, point.latitude, None, metersPerSecond, None, 1])
+        lastPoint = point
+
+  outputFile = os.path.join(outputDir, "%s.csv" % inputFileName)
   with open(outputFile, 'w') as fileOut:
     writer = csv.writer(fileOut)
-    for track in gpx.tracks:
-      if verbose:
-        print track.name
-      for segment in track.segments:
-        for point in segment.points:
-          ts = int(time.mktime(point.time.timetuple()) * 1000)
-          metersPerSecond = 0
-          if lastPoint:
-            distanceTravelled = distanceOnUnitSphereInMeters(lastPoint, point)
-            msSinceLastPoint = ts - int(time.mktime(lastPoint.time.timetuple()) * 1000)
-            if msSinceLastPoint > 0:
-              metersPerSecond = distanceTravelled / (msSinceLastPoint / 1000)
+    for row in outputRows:
+      writer.writerow(row)
 
-          if verbose:
-            print "{0}: ({1},{2})".format(point.time.__str__(), point.latitude, point.longitude)
-          writer.writerow([track.name, ts, point.longitude, point.latitude, None, metersPerSecond, None, 1])
-          lastPoint = point
   print "Wrote output file %s." % outputFile
 
 
 if __name__ == "__main__":
   (options, args) = parser.parse_args(sys.argv[1:])
   try:
-    input_path = args.pop(0)
+    inputPath = args.pop(0)
   except IndexError:
     parser.print_help(sys.stderr)
     sys.exit()
@@ -121,5 +161,5 @@ if __name__ == "__main__":
   verbose = options.verbose
 
   run(
-    input_path,
+    inputPath,
     options.output_dir)
