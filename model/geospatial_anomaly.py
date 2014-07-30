@@ -47,6 +47,8 @@ def addTimeEncoders(params):
   params["modelParams"]["sensorParams"]["encoders"]["timestamp_timeOfDay"] = {
     "fieldname": u"timestamp",
     "name": u"timestamp_timeOfDay",
+    "n": 2048,
+    "w": 51,
     "timeOfDay": (21, 9.5),
     "type": "DateEncoder"
   }
