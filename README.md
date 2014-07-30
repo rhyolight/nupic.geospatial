@@ -21,3 +21,11 @@ You can use the route simulator to generate geospatial data and run it through t
 ### Loading your own data
 
 Use `./run.py <path/to/input>` to run data you've downloaded from the simulator (described above) through the system. This script will automatically create sequences base on the timing of the input rows. If you don't want this behavior, you can negate it with the `--manual-sequence` option.
+
+### Using [GPX](http://www.topografix.com/gpx.asp) files as input
+
+A conversion tool exists for this. GPX v1.0 works, and all the GPX v1.1 files I've used have worked without a problem (so far). 
+
+    ./tools/convert_gpx.py path/to/gpx/file
+
+This will write out a file you can use as input for `./run.py`.
