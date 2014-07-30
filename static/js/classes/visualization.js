@@ -11,6 +11,7 @@ var Visualization = Fiber.extend(function() {
             this.startVisible = null;
             this.numVisible = null;
             this.currentPosition = null;
+            this.autoUpdateMapLocation = true;
 
             this.overlays = null;
 
@@ -127,7 +128,9 @@ var Visualization = Fiber.extend(function() {
 
             this.overlays = overlays;
 
-            map.fitLatLngBounds(positions);
+            if (this.autoUpdateMapLocation) {
+                map.fitLatLngBounds(positions);
+            }
 
             this.updateIteration();
         },
@@ -211,6 +214,10 @@ var Visualization = Fiber.extend(function() {
             });
         },
 
+        setAutoUpdateMapLocation: function(autoUpdate) {
+            this.autoUpdateMapLocation = autoUpdate;
+        },
+
         /* Private */
 
         _initMap: function(containerID) {
@@ -229,6 +236,6 @@ var Visualization = Fiber.extend(function() {
             $(window).resize(function() {
                 map.refresh();
             });
-        },
+        }
     };
 });

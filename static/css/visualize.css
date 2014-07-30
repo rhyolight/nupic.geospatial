@@ -22,6 +22,14 @@
 	bottom: 23px;
 }
 
+.controls {
+    position: absolute;
+    right: 20px;
+    bottom: 100px;
+    background: white;
+    border: solid black 1px;
+}
+
 .chevron {
 	width: 8px;
 	height: 8px;
