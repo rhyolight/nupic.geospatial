@@ -21,16 +21,21 @@
 # ----------------------------------------------------------------------
 
 import unittest
-from mock import Mock
+from mock import Mock, patch
 
-from model.geospatial_anomaly import addTimeEncoders
 
 
 class TestGeoSpatialAnomaly(unittest.TestCase):
 
 
-
   def testAddEncodersToModelParams(self):
+    # Mocks out the required nupic modules within geospatial_anomaly.py
+    mock = Mock()
+    mockModules = {"nupic.data.datasethelpers.findDataset": mock,
+                   "nupic.frameworks.opf.modelfactory": mock}
+    with patch.dict("sys.modules", mockModules):
+      from model.geospatial_anomaly import addTimeEncoders
+
     mockParams = {
       "modelParams": {
         "sensorParams": {
