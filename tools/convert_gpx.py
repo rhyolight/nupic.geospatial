@@ -100,7 +100,8 @@ def readGpxTracksFromFile(inputPath):
 
 
 def readTracksFromGpxFilesInDirectory(inputDir):
-  if verbose: print "Reading GPX files in directory %s" % inputDir
+  if verbose:
+    print "Reading GPX files in directory %s" % inputDir
   tracks = []
   dirName = inputDir.split("/").pop()
   for gpxFileName in os.listdir(inputDir):
