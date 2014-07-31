@@ -22,6 +22,8 @@ You can use the route simulator to generate geospatial data and run it through t
 
 Use `./run.py <path/to/input>` to run data you've downloaded from the simulator (described above) through the system. This script will automatically create sequences base on the timing of the input rows. If you don't want this behavior, you can negate it with the `--manual-sequence` option.
 
+You can also enable "time of day" encoding with the `--time-encoders` option.
+
 ### Using [GPX](http://www.topografix.com/gpx.asp) files as input
 
 A conversion tool exists for this. GPX v1.0 works, and all the GPX v1.1 files I've used have worked without a problem (so far). 

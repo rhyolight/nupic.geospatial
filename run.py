@@ -47,6 +47,14 @@ parser.add_option(
   help="Automatically breaks into sequences based upon time gaps."
 )
 parser.add_option(
+  "-t",
+  "--time-encoders",
+  action="store_true",
+  default=False,
+  dest="useTimeEncoders",
+  help="Adds time of day encoder to model params."
+)
+parser.add_option(
   "-v",
   "--verbose",
   action="store_true",
@@ -63,7 +71,7 @@ parser.add_option(
 )
 
 
-def run(inputPath, outputDir, autoSequence):
+def run(inputPath, outputDir, useTimeEncoders, autoSequence):
 
   outputPath = os.path.abspath(outputDir)
   if not os.path.exists(outputPath):
@@ -77,7 +85,8 @@ def run(inputPath, outputDir, autoSequence):
   if verbose: print "Running NuPIC on %s..." % preProcessedOutputPath
   runGeospatialAnomaly(preProcessedOutputPath,
                        anomalyOutputPath,
-                       autoSequence=autoSequence)
+                       autoSequence=autoSequence,
+                       useTimeEncoders=useTimeEncoders)
 
   visualizationOutputPath = os.path.join(scriptDir, "static/js/data.js")
   if verbose: print "Creating visualization at %s..." % visualizationOutputPath
@@ -97,4 +106,5 @@ if __name__ == "__main__":
   run(
     input_path,
     options.outputDir,
+    options.useTimeEncoders,
     not options.manualSequence)
