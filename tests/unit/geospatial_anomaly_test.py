@@ -30,9 +30,16 @@ class TestGeoSpatialAnomaly(unittest.TestCase):
 
   def testAddEncodersToModelParams(self):
     # Mocks out the required nupic modules within geospatial_anomaly.py
-    mock = Mock()
-    mockModules = {"nupic.data.datasethelpers.findDataset": mock,
-                   "nupic.frameworks.opf.modelfactory": mock}
+    mockNuPICImport = Mock()
+    mockModules = {
+      "nupic": mockNuPICImport,
+      "nupic.data": mockNuPICImport.data,
+      "nupic.data.datasethelpers": mockNuPICImport.data.datasethelpers,
+      "nupic.data.datasethelpers.findDataset": mockNuPICImport.data.datasethelpers.findDataset,
+      "nupic.frameworks": mockNuPICImport.frameworks,
+      "nupic.frameworks.opf": mockNuPICImport.frameworks.opf,
+      "nupic.frameworks.opf.modelfactory": mockNuPICImport.frameworks.opf.modelfactory,
+    }
     with patch.dict("sys.modules", mockModules):
       from model.geospatial_anomaly import addTimeEncoders
 
