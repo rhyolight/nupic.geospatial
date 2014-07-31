@@ -90,7 +90,8 @@ def distanceOnUnitSphereInMeters(point1, point2):
 
 
 def readGpxTracksFromFile(inputPath):
-  if verbose: print "Reading GPX file %s" % inputPath
+  if verbose:
+    print "Reading GPX file %s" % inputPath
   inputFileName = os.path.splitext(os.path.basename(inputPath))[0]
   gpxFile = open(inputPath, 'r')
   gpx = gpxpy.parse(gpxFile)
@@ -101,7 +102,7 @@ def readGpxTracksFromFile(inputPath):
 def readTracksFromGpxFilesInDirectory(inputDir):
   if verbose: print "Reading GPX files in directory %s" % inputDir
   tracks = []
-  dirName = inputDir.split('/').pop()
+  dirName = inputDir.split("/").pop()
   for gpxFileName in os.listdir(inputDir):
     _, fileTracks = readGpxTracksFromFile(os.path.join(inputDir, gpxFileName))
     tracks = tracks + fileTracks
