@@ -57,31 +57,6 @@ class TestGeoSpatialAnomaly(unittest.TestCase):
                     result["modelParams"]["sensorParams"]["encoders"],
                     "No new time encoer was added to model params.")
 
-  # def testDistanceCalculationBetweenTwoPoints(self):
-  #   point1 = Mock()
-  #   point1.latitude = 30
-  #   point1.longitude = 120
-  #   point2 = Mock()
-  #   point2.latitude = 30
-  #   point2.longitude = 121
-  #
-  #   distance = distanceOnUnitSphereInMeters(point1, point2)
-  #   self.assertEqual(distance, 96327.55557105792, "Distance calculation was wrong")
-  #
-  #
-  #
-  # def testDistanceCalculationBetweenTwoSamePoints(self):
-  #   point1 = Mock()
-  #   point1.latitude = 30
-  #   point1.longitude = 120
-  #   point2 = Mock()
-  #   point2.latitude = 30
-  #   point2.longitude = 120
-  #
-  #   distance = distanceOnUnitSphereInMeters(point1, point2)
-  #   self.assertEqual(distance, 0, "Distance calculation was wrong")
-
-
 
 if __name__ == '__main__':
   unittest.main()
