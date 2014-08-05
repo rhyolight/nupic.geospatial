@@ -53,17 +53,34 @@ def addTimeEncoders(params):
   return params
 
 
-def createModel(useTimeEncoders):
+
+def setEncoderScale(params, scale):
+  params["modelParams"]["sensorParams"]["encoders"]["vector"]["scale"] = \
+    int(scale)
+  return params
+
+
+
+def createModel(useTimeEncoders, scale, verbose):
   params = model_params.MODEL_PARAMS
   if useTimeEncoders:
     params = addTimeEncoders(params)
+  if scale:
+    params = setEncoderScale(params, scale)
+  if verbose:
+    print "Model parameters:"
+    print params
   return ModelFactory.create(params)
 
 
+
 def runGeospatialAnomaly(dataPath, outputPath,
+                         scale=False,
                          autoSequence=True,
-                         useTimeEncoders=False):
-  model = createModel(useTimeEncoders)
+                         useTimeEncoders=False,
+                         verbose=False):
+
+  model = createModel(useTimeEncoders, scale, verbose)
 
   with open (findDataset(dataPath)) as fin:
     reader = csv.reader(fin)
@@ -108,7 +125,8 @@ def runGeospatialAnomaly(dataPath, outputPath,
       lastTrackName = trackName
 
       if newSequence:
-        print "Starting new sequence..."
+        if verbose:
+          print "Starting new sequence..."
         model.resetSequenceStates()
 
       modelInput = {
@@ -127,8 +145,8 @@ def runGeospatialAnomaly(dataPath, outputPath,
                           speed,
                           anomalyScore,
                           1 if newSequence else 0])
-
-      print "[{0}] - Anomaly score: {1}.".format(timestamp, anomalyScore)
+      if verbose:
+        print "[{0}] - Anomaly score: {1}.".format(timestamp, anomalyScore)
 
   print "Anomaly scores have been written to {0}".format(outputPath)
 

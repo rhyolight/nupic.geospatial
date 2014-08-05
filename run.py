@@ -69,9 +69,16 @@ parser.add_option(
   dest="outputDir",
   help="Where to write the output file."
 )
+parser.add_option(
+  "-s",
+  "--scale",
+  default=False,
+  dest="scale",
+  help="Meter resolution for Geospatial Coordinate Encoder (default 10m)."
+)
 
 
-def run(inputPath, outputDir, useTimeEncoders, autoSequence):
+def run(inputPath, outputDir, useTimeEncoders, scale, autoSequence):
 
   outputPath = os.path.abspath(outputDir)
   if not os.path.exists(outputPath):
@@ -79,14 +86,16 @@ def run(inputPath, outputDir, useTimeEncoders, autoSequence):
 
   preProcessedOutputPath = os.path.join(outputPath, "preprocessed_data.csv")
   if verbose: print "Pre-processing %s..." % inputPath
-  preprocess(inputPath, preProcessedOutputPath)
+  preprocess(inputPath, preProcessedOutputPath, verbose=verbose)
 
   anomalyOutputPath = os.path.join(outputPath, "anomaly_scores.csv")
   if verbose: print "Running NuPIC on %s..." % preProcessedOutputPath
   runGeospatialAnomaly(preProcessedOutputPath,
                        anomalyOutputPath,
+                       scale=scale,
                        autoSequence=autoSequence,
-                       useTimeEncoders=useTimeEncoders)
+                       useTimeEncoders=useTimeEncoders,
+                       verbose=verbose)
 
   visualizationOutputPath = os.path.join(scriptDir, "static/js/data.js")
   if verbose: print "Creating visualization at %s..." % visualizationOutputPath
@@ -107,4 +116,5 @@ if __name__ == "__main__":
     input_path,
     options.outputDir,
     options.useTimeEncoders,
+    options.scale,
     not options.manualSequence)
