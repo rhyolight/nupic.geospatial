@@ -32,7 +32,7 @@ import sys
 
 
 
-def preprocess(dataPath, outPath):
+def preprocess(dataPath, outPath, verbose=False):
   with open(dataPath) as csvfile:
     reader = csv.reader(csvfile)
     writer = csv.writer(open(outPath, "wb"))
@@ -66,11 +66,13 @@ def preprocess(dataPath, outPath):
       lastTimestamp = timestamp
 
       if keep:
-        print "Keeping row:\t{0}".format(row)
+        if verbose:
+          print "Keeping row:\t{0}".format(row)
         lastTimestampKept = timestamp
         writer.writerow(row)
       else:
-        print "Discarding row:\t{0}".format(row)
+        if verbose:
+          print "Discarding row:\t{0}".format(row)
 
 
 
