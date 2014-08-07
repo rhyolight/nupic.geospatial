@@ -74,7 +74,7 @@ parser.add_option(
   "--scale",
   default=False,
   dest="scale",
-  help="Meter resolution for Geospatial Coordinate Encoder (default 10m)."
+  help="Meter resolution for Geospatial Coordinate Encoder (default 5m)."
 )
 
 
