@@ -12,6 +12,15 @@ Now, install the other python requirements for `nupic.geospatial`:
 
     pip install -r requirements.txt
 
+## Tutorial Videos
+
+#### [Using the NuPIC Geospatial Tracking Application](http://www.youtube.com/watch?v=M4dD9wCQLkA)
+[![NuPIC Geospatial Tracking Application Tutorial](http://img.youtube.com/vi/M4dD9wCQLkA/hqdefault.jpg)](http://www.youtube.com/watch?v=M4dD9wCQLkA)
+
+#### [Geospatial Coordinate Encoder Explained](http://www.youtube.com/watch?v=KxxHo-FtKRo)
+[![Geospatial Coordinate Encoder](http://img.youtube.com/vi/KxxHo-FtKRo/hqdefault.jpg)](http://www.youtube.com/watch?v=KxxHo-FtKRo)
+
+
 ## Usage
 
 To run, simply start the web server from the command line:
