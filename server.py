@@ -94,4 +94,4 @@ if __name__ == "__main__":
   if not os.path.exists(DIR_OUTPUT):
     os.makedirs(DIR_OUTPUT)
 
-  app.run(debug=True)
+  app.run(debug=True, host="0.0.0.0")
