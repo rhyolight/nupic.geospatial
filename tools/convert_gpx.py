@@ -149,7 +149,10 @@ def run(inputPath, outputDir):
           if msSinceLastPoint > 0:
             metersPerSecond = distanceTravelled / (msSinceLastPoint / 1000)
 
-        outputRows.append([track.name, ts, point.longitude, point.latitude, None, metersPerSecond, None, 1])
+        if hasElevation:
+          outputRows.append([track.name, ts, point.longitude, point.latitude, point.elevation, metersPerSecond, None, 1])
+        else:
+          outputRows.append([track.name, ts, point.longitude, point.latitude, None, metersPerSecond, None, 1])
         lastPoint = point
 
   outputFile = os.path.join(outputDir, "%s.csv" % inputFileName)
@@ -170,6 +173,7 @@ if __name__ == "__main__":
     sys.exit()
 
   verbose = options.verbose
+  hasElevation = options.hasElevation
 
   run(
     inputPath,
