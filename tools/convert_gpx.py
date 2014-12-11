@@ -31,6 +31,7 @@ import gpxpy.gpx
 
 DEFAULT_OUTPUT_DIR = "output"
 verbose = False
+hasElevation = False
 
 parser = OptionParser(
   usage="%prog <path/to/gpx/data> [options]\n\nConvert GPX data file(s) into "
@@ -40,6 +41,14 @@ parser = OptionParser(
         "time."
 )
 
+parser.add_option(
+  "-e",
+  "--elevation",
+  action="store_true",
+  default=False,
+  dest="hasElevation",
+  help="Elevation data inside <ele> tags will be included in the output if it's present in the GPX file."
+)
 parser.add_option(
   "-o",
   "--output-dir",
