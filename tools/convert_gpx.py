@@ -32,6 +32,7 @@ import gpxpy.gpx
 DEFAULT_OUTPUT_DIR = "output"
 verbose = False
 hasElevation = False
+elevationInFeet = False
 
 parser = OptionParser(
   usage="%prog <path/to/gpx/data> [options]\n\nConvert GPX data file(s) into "
@@ -48,6 +49,14 @@ parser.add_option(
   default=False,
   dest="hasElevation",
   help="Elevation data inside <ele> tags will be included in the output if it's present in the GPX file."
+)
+parser.add_option(
+  "-f",
+  "--feet",
+  action="store_true",
+  default=False,
+  dest="elevationInFeet",
+  help="Elevation data inside <ele> tags is in feet. It will be expressed in meters in the NuPIC input data file."
 )
 parser.add_option(
   "-o",
@@ -124,6 +133,9 @@ def sortTracksByDateAscending(tracks):
   return sorted(tracks, key=lambda track: track.segments[0].points[0].time)
 
 
+def toMeters(elev):
+  return "{0:.2f}".format(elev * 0.3048)
+
 
 def run(inputPath, outputDir):
 
@@ -149,8 +161,12 @@ def run(inputPath, outputDir):
           if msSinceLastPoint > 0:
             metersPerSecond = distanceTravelled / (msSinceLastPoint / 1000)
 
+
         if hasElevation:
-          outputRows.append([track.name, ts, point.longitude, point.latitude, point.elevation, metersPerSecond, None, 1])
+          elevation = point.elevation
+          if elevationInFeet:
+            elevation = toMeters(elevation)
+          outputRows.append([track.name, ts, point.longitude, point.latitude, elevation, metersPerSecond, None, 1])
         else:
           outputRows.append([track.name, ts, point.longitude, point.latitude, None, metersPerSecond, None, 1])
         lastPoint = point
@@ -174,6 +190,7 @@ if __name__ == "__main__":
 
   verbose = options.verbose
   hasElevation = options.hasElevation
+  elevationInFeet = options.elevationInFeet
 
   run(
     inputPath,
