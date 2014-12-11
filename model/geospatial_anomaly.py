@@ -131,7 +131,7 @@ def runGeospatialAnomaly(dataPath, outputPath,
         model.resetSequenceStates()
 
       modelInput = {
-        "vector": (longitude, latitude, speed)
+        "vector": (speed, longitude, latitude)
       }
 
       if useTimeEncoders:
