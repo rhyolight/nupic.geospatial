@@ -98,6 +98,7 @@ def runGeospatialAnomaly(dataPath, outputPath,
 
     lastTimestamp = None
     lastTrackName = None
+    outputFormat = "%Y-%m-%dT%H:%M:%S"
 
     for _, record in enumerate(reader, start=1):
       trackName = record[0]
@@ -139,7 +140,7 @@ def runGeospatialAnomaly(dataPath, outputPath,
       result = model.run(modelInput)
       anomalyScore = result.inferences['anomalyScore']
 
-      csvWriter.writerow([timestamp,
+      csvWriter.writerow([timestamp.strftime(outputFormat),
                           longitude,
                           latitude,
                           speed,
