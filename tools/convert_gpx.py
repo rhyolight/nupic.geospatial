@@ -56,7 +56,7 @@ parser.add_option(
   action="store_true",
   default=False,
   dest="elevationInFeet",
-  help="Elevation data inside <ele> tags is in feet. It will be expressed in meters in the NuPIC input data file."
+  help="Indicates that elevation data inside <ele> tags is in feet. It will be converted and expressed in meters in the output .csv file."
 )
 parser.add_option(
   "-o",
