@@ -148,6 +148,12 @@ def run(inputPath, outputDir):
   lastPoint = None
   outputRows = []
 
+  if verbose:
+    if hasElevation:
+      print "Elevation data is present on input file(s)."
+    if elevationInFeet:
+      print "Elevation data will be converted to meters automatically."
+
   for track in tracks:
     if verbose:
       print "Processing track %s..." % track.name
