@@ -105,8 +105,12 @@ def runGeospatialAnomaly(dataPath, outputPath,
       timestamp = datetime.datetime.fromtimestamp(int(record[1]) / 1e3)
       longitude = float(record[2])
       latitude = float(record[3])
+      altitude = record[4]
       speed = float(record[5])
       accuracy = float(record[7])
+
+      if altitude != "":
+        altitude = float(altitude)
 
       if accuracy > ACCURACY_THRESHOLD:
         continue
@@ -130,9 +134,12 @@ def runGeospatialAnomaly(dataPath, outputPath,
           print "Starting new sequence..."
         model.resetSequenceStates()
 
-      modelInput = {
-        "vector": (speed, longitude, latitude)
-      }
+      modelInput = {}
+      
+      if altitude == "":
+        modelInput["vector"] = (speed, longitude, latitude)
+      else:
+        modelInput["vector"] = (speed, longitude, latitude, altitude)
 
       if useTimeEncoders:
         modelInput["timestamp"] = timestamp
