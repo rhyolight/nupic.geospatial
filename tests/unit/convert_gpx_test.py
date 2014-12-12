@@ -40,7 +40,7 @@ class TestGpxConversion(unittest.TestCase):
     point2.longitude = 121
 
     distance = distanceOnUnitSphereInMeters(point1, point2)
-    self.assertEqual(distance, 96327.55557110473)#, "Distance calculation was wrong")
+    self.assertAlmostEqual(distance, 96327.55557110473, places=6, msg="Distance calculation was wrong")
 
 
 
