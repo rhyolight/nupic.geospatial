@@ -168,13 +168,13 @@ def run(inputPath, outputDir):
             metersPerSecond = distanceTravelled / (msSinceLastPoint / 1000)
 
 
+        elevation = None
         if hasElevation:
           elevation = point.elevation
           if elevationInFeet:
             elevation = toMeters(elevation)
-          outputRows.append([track.name, ts, point.longitude, point.latitude, elevation, metersPerSecond, None, 1])
-        else:
-          outputRows.append([track.name, ts, point.longitude, point.latitude, None, metersPerSecond, None, 1])
+        
+        outputRows.append([track.name, ts, point.longitude, point.latitude, elevation, metersPerSecond, None, 1])
         lastPoint = point
 
   outputFile = os.path.join(outputDir, "%s.csv" % inputFileName)
