@@ -98,6 +98,7 @@ def runGeospatialAnomaly(dataPath, outputPath,
 
     lastTimestamp = None
     lastTrackName = None
+    outputFormat = "%Y-%m-%dT%H:%M:%S"
 
     for _, record in enumerate(reader, start=1):
       trackName = record[0]
@@ -107,6 +108,8 @@ def runGeospatialAnomaly(dataPath, outputPath,
       speed = float(record[5])
       accuracy = float(record[7])
 
+      altitude = float(record[4]) if record[4] != "" else None
+      
       if accuracy > ACCURACY_THRESHOLD:
         continue
 
@@ -130,16 +133,16 @@ def runGeospatialAnomaly(dataPath, outputPath,
         model.resetSequenceStates()
 
       modelInput = {
-        "vector": (longitude, latitude, speed)
+        "vector": (speed, longitude, latitude, altitude)
       }
-
+      
       if useTimeEncoders:
         modelInput["timestamp"] = timestamp
 
       result = model.run(modelInput)
       anomalyScore = result.inferences['anomalyScore']
 
-      csvWriter.writerow([timestamp,
+      csvWriter.writerow([timestamp.strftime(outputFormat),
                           longitude,
                           latitude,
                           speed,
