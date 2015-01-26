@@ -70,7 +70,9 @@ def createModel(useTimeEncoders, scale, verbose):
   if verbose:
     print "Model parameters:"
     print params
-  return ModelFactory.create(params)
+  model = ModelFactory.create(params)
+  model.enableInference({"predictedField": "vector"})
+  return model
 
 
 
@@ -140,7 +142,7 @@ def runGeospatialAnomaly(dataPath, outputPath,
         modelInput["timestamp"] = timestamp
 
       result = model.run(modelInput)
-      anomalyScore = result.inferences['anomalyScore']
+      anomalyScore = result.inferences["anomalyScore"]
 
       csvWriter.writerow([timestamp.strftime(outputFormat),
                           longitude,
