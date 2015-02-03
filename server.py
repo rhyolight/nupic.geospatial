@@ -62,7 +62,7 @@ def process():
     f.write(request.data)
 
   preprocess(dataFile, processedDataFile)
-  runGeospatialAnomaly(processedDataFile, modelOutputFile)
+  runGeospatialAnomaly(processedDataFile, modelOutputFile, verbose=True)
   postprocess(modelOutputFile, jsDataFile)
 
   return "Done."
