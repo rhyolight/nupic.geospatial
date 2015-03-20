@@ -34,8 +34,6 @@ class TestGeoSpatialAnomaly(unittest.TestCase):
     mockModules = {
       "nupic": mockNuPICImport,
       "nupic.data": mockNuPICImport.data,
-      "nupic.data.datasethelpers": mockNuPICImport.data.datasethelpers,
-      "nupic.data.datasethelpers.findDataset": mockNuPICImport.data.datasethelpers.findDataset,
       "nupic.frameworks": mockNuPICImport.frameworks,
       "nupic.frameworks.opf": mockNuPICImport.frameworks.opf,
       "nupic.frameworks.opf.modelfactory": mockNuPICImport.frameworks.opf.modelfactory,

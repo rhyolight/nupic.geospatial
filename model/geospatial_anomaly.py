@@ -28,7 +28,6 @@ import csv
 import datetime
 import sys
 
-from nupic.data.datasethelpers import findDataset
 from nupic.frameworks.opf.modelfactory import ModelFactory
 
 import model_params
@@ -84,7 +83,7 @@ def runGeospatialAnomaly(dataPath, outputPath,
 
   model = createModel(useTimeEncoders, scale, verbose)
 
-  with open (findDataset(dataPath)) as fin:
+  with open (dataPath) as fin:
     reader = csv.reader(fin)
     csvWriter = csv.writer(open(outputPath,"wb"))
     csvWriter.writerow(["timestamp",
