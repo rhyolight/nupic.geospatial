@@ -93,10 +93,6 @@ def runGeospatialAnomaly(dataPath, outputPath,
                        "anomaly_score",
                        "new_sequence"])
 
-    reader.next()
-    reader.next()
-    reader.next()
-
     lastTimestamp = None
     lastTrackName = None
     outputFormat = "%Y-%m-%dT%H:%M:%S"

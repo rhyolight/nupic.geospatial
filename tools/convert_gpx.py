@@ -173,7 +173,7 @@ def run(inputPath, outputDir):
           elevation = point.elevation
           if elevationInFeet:
             elevation = toMeters(elevation)
-        
+
         outputRows.append([track.name, ts, point.longitude, point.latitude, elevation, metersPerSecond, None, 1])
         lastPoint = point
 
