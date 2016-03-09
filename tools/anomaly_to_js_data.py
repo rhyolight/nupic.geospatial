@@ -34,12 +34,13 @@ def postprocess(dataPath, outPath):
       reader.next()  # header
 
       for row in reader:
-        timestamp = row[0]
-        longitude = float(row[1])
-        latitude = float(row[2])
-        speed = float(row[3])
-        anomalyScore = float(row[4])
-        newSequence = "true" if int(row[5]) else "false"
+        trackName = row[0]
+        timestamp = row[1]
+        longitude = float(row[2])
+        latitude = float(row[3])
+        speed = float(row[4])
+        anomalyScore = float(row[5])
+        newSequence = "true" if int(row[6]) else "false"
         out.write("[new Date(\"{0}\"), {1}, {2}, {3}, {4}, {5}],\n".format(
           timestamp, longitude, latitude, speed, anomalyScore, newSequence))
 

@@ -82,11 +82,12 @@ def runGeospatialAnomaly(dataPath, outputPath,
                          verbose=False):
 
   model = createModel(useTimeEncoders, scale, verbose)
-
+  print dataPath
   with open (dataPath) as fin:
     reader = csv.reader(fin)
     csvWriter = csv.writer(open(outputPath,"wb"))
-    csvWriter.writerow(["timestamp",
+    csvWriter.writerow(["trackName",
+		       "timestamp",
                        "longitude",
                        "latitude",
                        "speed",
@@ -103,14 +104,14 @@ def runGeospatialAnomaly(dataPath, outputPath,
 
     for _, record in enumerate(reader, start=1):
       trackName = record[0]
-      timestamp = datetime.datetime.fromtimestamp(int(record[1]) / 1e3)
+      timestamp = datetime.datetime.fromtimestamp(int(record[1]))
       longitude = float(record[2])
       latitude = float(record[3])
       speed = float(record[5])
       accuracy = float(record[7])
 
       altitude = float(record[4]) if record[4] != "" else None
-      
+
       if accuracy > ACCURACY_THRESHOLD:
         continue
 
@@ -129,28 +130,28 @@ def runGeospatialAnomaly(dataPath, outputPath,
       lastTrackName = trackName
 
       if newSequence:
-        if verbose:
-          print "Starting new sequence..."
+        print "Starting new sequence..."
         model.resetSequenceStates()
 
       modelInput = {
         "vector": (speed, longitude, latitude, altitude)
       }
-      
+
       if useTimeEncoders:
         modelInput["timestamp"] = timestamp
 
       result = model.run(modelInput)
       anomalyScore = result.inferences["anomalyScore"]
 
-      csvWriter.writerow([timestamp.strftime(outputFormat),
+      csvWriter.writerow([trackName,
+			  timestamp.strftime(outputFormat),
                           longitude,
                           latitude,
                           speed,
                           anomalyScore,
                           1 if newSequence else 0])
       if verbose:
-        print "[{0}] - Anomaly score: {1}.".format(timestamp, anomalyScore)
+        print "[{0} - {1}] - Anomaly score: {2}.".format(trackName, timestamp, anomalyScore)
 
   print "Anomaly scores have been written to {0}".format(outputPath)
 
