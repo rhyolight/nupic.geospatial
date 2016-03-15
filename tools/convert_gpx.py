@@ -123,8 +123,9 @@ def readTracksFromGpxFilesInDirectory(inputDir):
   tracks = []
   dirName = inputDir.split("/").pop()
   for gpxFileName in os.listdir(inputDir):
-    _, fileTracks = readGpxTracksFromFile(os.path.join(inputDir, gpxFileName))
-    tracks = tracks + fileTracks
+    if gpxFileName.endswith(".gpx"):
+      _, fileTracks = readGpxTracksFromFile(os.path.join(inputDir, gpxFileName))
+      tracks = tracks + fileTracks
   return dirName, tracks
 
 
@@ -173,7 +174,7 @@ def run(inputPath, outputDir):
           elevation = point.elevation
           if elevationInFeet:
             elevation = toMeters(elevation)
-        
+
         outputRows.append([track.name, ts, point.longitude, point.latitude, elevation, metersPerSecond, None, 1])
         lastPoint = point
 
